@@ -1,0 +1,16 @@
+<tal:block
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:tal="http://xml.zope.org/namespaces/tal"
+	xmlns:metal="http://xml.zope.org/namespaces/metal"
+	xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+	xmlns:phptal="http://phptal.org/ns/phptal"
+>
+  <section>
+    <h1 i18n:translate="string:Welcome to Zend Application bootstrap project" />
+    <ul>
+      <li><a tal:attributes="href php:this.url(array(), 'home_index')" i18n:translate="">Homepage</a></li>
+      <li><a tal:attributes="href php:this.url(array(), 'user_index')" i18n:translate="">User module</a></li>
+      <li><a href="/fake/controller" i18n:translate="">Fake module</a></li>
+    </ul>
+  </section>
+</tal:block>

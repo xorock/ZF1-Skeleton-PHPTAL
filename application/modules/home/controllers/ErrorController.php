@@ -1,0 +1,70 @@
+<?php
+
+/**
+ * Global default error handler.
+ *
+ * Handles global errors across the application.
+ *
+ * @category  Namesco
+ * @package   ZtalExample
+ * @author    Robert Goldsmith <rgoldsmith@names.co.uk>
+ * @copyright 2009-2011 Namesco Limited
+ * @license   http://names.co.uk/license Namesco
+ */
+
+/**
+ * Default error controller.
+ *
+ * As well as acting like a normal controller, this controller is used for
+ * redirecting un-caught error events across the application.
+ *
+ * @category Namesco
+ * @package  ZtalExample
+ * @author   Robert Goldsmith <rgoldsmith@names.co.uk>
+ */
+class Home_ErrorController extends Zend_Controller_Action {
+    
+    public function init() {
+        $this->getResponse()->clearBody();
+        $this->getHelper('layout')->disableLayout();
+    }
+
+    /**
+     * Handles displaying of errors.
+     *
+     * Handles displaying of errors from anywhere on the site not caught
+     * elsewhere.
+     *
+     * @return void
+     */
+    public function errorAction() {
+        $errors = $this->_getParam('error_handler');
+
+        switch ($errors->type) {
+            case Zend_Controller_Plugin_ErrorHandler::EXCEPTION_NO_CONTROLLER:
+            case Zend_Controller_Plugin_ErrorHandler::EXCEPTION_NO_ACTION:
+                // 404 error -- controller or action not found
+                $this->getResponse()->setHttpResponseCode(404);
+                $this->view->message = 'Page not found';
+                break;
+
+            default:
+                // application error
+                $this->getResponse()->setHttpResponseCode(500);
+                $this->view->message = 'Application error';
+                break;
+        }
+
+        $this->view->exceptionMessage = $errors->exception->getMessage();
+        $this->view->stackTrace = $errors->exception->getTraceAsString();
+        $this->view->requestParameters = var_export($errors->request->getParams(), true);
+        $this->view->productionMode = (APPLICATION_ENV == 'production');
+
+        Zend_Registry::get('log')->err(sprintf('Application error: %s, file: %s', 
+            $errors->exception->getMessage(),
+            $errors->exception->getFile()
+        ));
+    }
+
+}
+

@@ -1,0 +1,386 @@
+<tal:block
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:tal="http://xml.zope.org/namespaces/tal"
+	xmlns:metal="http://xml.zope.org/namespaces/metal"
+	xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+	xmlns:phptal="http://phptal.org/ns/phptal"
+>
+	<!--
+	/**
+	 * Displays a Zend_Form element as an html form.
+	 *
+	 * The single entry point to the macros in this file is the talForm macro.
+	 * This macro will accept a number of optional parameters and a required
+	 * Zend_Form (or subclass) instance. It will render the form content,
+	 * including display groups, with full element translation.
+	 *
+	 * As well as the listed parameters supplied to the form as shown below (by
+	 * defining variables of the correct name when calling the macro), it is
+	 * possible to set values on a per-element basis within the Zend_Form instance.
+	 * Currently supported are: name, id, maxlength (text), class,
+	 * rows (textarea), cols (textarea), sort (select).
+	 *
+	 * @param Zend_Form form               The Zend_Form to render.
+	 * @param bool      useSimpleNames     Whether to use full, array wrapped
+	 *                                       names for elements based on the
+	 *                                       form's id (e.g. form1[element1])
+	 *                                       or just the simple name without
+	 *                                       wrapping (e.g. element1)
+	 * @param string    errorMode          Optional. Controls whether and where
+	 *                                       errors are displayed. Options are
+	 *                                       'header', 'inline', 'both' or 'none'.
+	 * @param string    headerErrorMacro   Optional. The path to a macro to use
+	 *                                       for displaying errors in a header
+	 *                                       block at the top of the form.
+	 * @param string    elementErrorMacro  Optional. The path to a macro to use
+	 *                                       for displaying errors after each
+	 *                                       element (inline).
+	 * @param string    singleElementMacro Optional. The path to a macro to use
+	 *                                       for outputting a single form
+	 *                                       element (i.e. not a group or a
+	 *                                       hidden element)
+	 * @param string    displayGroupMacro  Optional. The path to a macro to use
+	 *                                        for outputting a display group.
+	 */
+	-->
+
+
+	<!-- Form Fragment, expects an instance of Zend_Form, or something that
+		 extends it-->
+	<form tal:attributes="action form/getAction;
+						  class Ztal\Tales\Form.getAttrib:form,string:class | string:talForm;
+						  id form/getId;
+						  method form/getMethod;
+						  enctype form/getEnctype;"
+		  metal:define-macro="talForm"
+	>
+		<tal:block tal:define="errorMode errorDisplayMode | string:header;">
+			<tal:block
+				tal:condition="
+					Ztal\Tales\Generic.equal:errorMode,string:header
+					| Ztal\Tales\Generic.equal:errorMode,string:both"
+			>
+				<tal:block metal:use-macro="${headerErrorMacro | string:headerErrors}" />
+			</tal:block>
+
+			<tal:block
+				tal:define="
+					elements form;
+					simpleElementNames useSimpleNames | Ztal\Tales\Form.getAttrib:form,string:useSimpleNames | string:0;
+					ulClass Ztal\Tales\Form.getAttrib:form, string:ulClass;"
+				metal:use-macro="fields"
+			/>
+		</tal:block>
+	</form>
+
+
+
+	<!-- Fragment to display header errors -->
+	<tal:block metal:define-macro="headerErrors">
+		<!-- If any errors exist, create a div for them -->
+		<div tal:condition="form/isErrors" class="errors">
+			<h3 i18n:translate="string:error" />
+
+			<!-- loop through all the global error messages -->
+			<ul tal:condition="globalErrors" tal:define="globalErrors form/getErrorMessages">
+				<li tal:repeat="error globalErrors" i18n:translate="error" />
+			</ul>
+
+			<!-- loop through all the elements with errors -->
+			<tal:block tal:repeat="elementErrors form/getErrors">
+				<ul tal:condition="elementErrors">
+					<!--
+						For each element with errors, show the element
+						name and a ul list of errors
+					-->
+					<li tal:define="element Ztal\Tales\Form.getElement:form,repeat/elementErrors/key">
+						<tal:inline i18n:translate="element/getLabel" />
+						<ul>
+							<li
+								tal:repeat="error elementErrors"
+								i18n:domain="errorMessage_${repeat/elementErrors/key}"
+								i18n:translate="error"
+							/>
+						</ul>
+					</li>
+				</ul>
+			</tal:block>
+		</div>
+	</tal:block>
+
+
+	<!-- Fragment to display the fields held in a form or display group -->
+	<tal:block metal:define-macro="fields">
+		<!-- Iterate over the contents of the form and render everything
+			 except hidden elements appropriately -->
+		<ul tal:attributes="class ulClass">
+			<tal:block tal:repeat="element elements">
+
+				<!-- Is this element a display group? -->
+				<li tal:condition="Ztal\Tales\Form.isDisplayGroup:element"
+					tal:define="displayGroupElement element">
+					<tal:block metal:use-macro="${displayGroupMacro | Ztal\Tales\Form.getAttrib:element,string:macro | string:displayGroup}" />
+				</li>
+
+				<!-- Is this an element (but not a hidden element)? -->
+				<li tal:condition="Ztal\Tales\Form.isFormElement:element"
+					tal:define="
+						elementErrors Ztal\Tales\Form.getErrors:form,repeat/element/key;
+						errorClass Ztal\Tales\Generic.isTrue:exists:elementErrors,string:hasError;"
+					tal:attributes="
+						class string:${errorClass} ${Ztal\Tales\Generic.isTrue:element/isRequired,string:required-element | string:optional-element} ${Ztal\Tales\Form.getAttrib:element,string:contextClass} ${Ztal\Tales\Form.inputType:element}-element;
+						id string:${element/getId}-field"
+				>
+					<!-- display the element -->
+					<tal:block metal:use-macro="${singleElementMacro | Ztal\Tales\Form.getAttrib:element,string:macro | string:singleElement}" />
+
+					<!-- is there an error to display? -->
+					<tal:block tal:condition="
+							Ztal\Tales\Generic.equal:errorMode,string:inline
+							| Ztal\Tales\Generic.equal:errorMode,string:both">
+						<tal:block
+							tal:condition="not:Ztal\Tales\Generic.equal:elementErrors,null"
+							i18n:domain="errorMessage_${repeat/element/key}"
+							metal:use-macro="${elementErrorMacro | Ztal\Tales\Form.getAttrib:element,string:errorMacro | string:perElementErrors}" />
+					</tal:block>
+
+				</li>
+			</tal:block>
+		</ul>
+
+		<!-- Iterate over the hidden elements, if any -->
+		<tal:block tal:repeat="element elements">
+			<tal:block tal:condition="Ztal\Tales\Form.isHiddenElement:element">
+				<tal:block
+					tal:define="value element/getValue"
+					metal:use-macro="${singleElementMacro | Ztal\Tales\Form.getAttrib:element,string:macro | string:singleElement}" />
+			</tal:block>
+		</tal:block>
+
+	</tal:block>
+
+
+
+	<!-- macro to display per-element errors -->
+	<tal:block metal:define-macro="perElementErrors">
+		<ul class="elementErrors">
+			<li tal:repeat="error elementErrors" i18n:translate="error" />
+		</ul>
+	</tal:block>
+
+
+
+	<!-- Display Group Fragment, expects an instance of Zend_Form_DisplayGroup,
+		 will render it into a fieldset -->
+	<fieldset metal:define-macro="displayGroup"
+			  tal:attributes="class Ztal\Tales\Form.getAttrib:element,string:class;
+					id Ztal\Tales\Form.getAttrib:element,string:id | repeat/element/key">
+		<legend tal:condition="not:Ztal\Tales\Generic.equal:element/getLegend,string:">
+			<span i18n:translate="element/getLegend" />
+		</legend>
+		<span tal:replace="structure Ztal\Tales\Form.getSlotContent:string:${repeat/element/key}-preSlot" />
+		<tal:block tal:define="elements displayGroupElement/getElements" metal:use-macro="fields" />
+		<span tal:replace="structure Ztal\Tales\Form.getSlotContent:string:${repeat/element/key}-postSlot" />
+	</fieldset>
+
+	<!-- Date selection macro, for displaying date drop downs.
+	This macro expects the element responds to getSeparator and getElements.
+
+	getSeparator should return the seperator you wish to use between select
+	boxes.
+
+	getElements should return an array of Zend_Form_Element_Selects.
+	-->
+	<tal:block metal:define-macro="dateSelect">
+		<label tal:condition="Ztal\Tales\Form.showLabelBefore:element"
+			   i18n:translate="element/getLabel"
+		/>
+		<tal:block  tal:repeat="dateElement element/getElements">
+			<tal:block tal:define="element dateElement" metal:use-macro="singleElement" />
+			<tal:inline tal:condition="not: repeat/dateElement/end" tal:content="element/getSeparator|string:/" />
+		</tal:block>
+   </tal:block>
+
+	<!-- Will display an <input> element -->
+	<input metal:define-macro="inputElement"
+		   tal:attributes="type Ztal\Tales\Form.inputType:element;
+						   name name | Ztal\Tales\Generic.isTrue:simpleElementNames,element/getName | element/getFullyQualifiedName;
+						   id element/getId;
+						   class Ztal\Tales\Form.getAttrib:element,string:class;
+						   value value | nothing;
+						   maxlength Ztal\Tales\Form.getAttrib:element,string:maxlength;
+						   required Ztal\Tales\Generic.isTrue:string:${Ztal\Tales\Form.isRequired:element},string:required;
+						   readonly Ztal\Tales\Generic.isTrue:string:${Ztal\Tales\Form.isReadOnly:element},string:readonly;
+						   placeholder Ztal\Tales\Form.getAttrib:element,string:placeholder;
+						   checked checked | nothing;
+						   autocomplete Ztal\Tales\Generic.isTrue:string:${Ztal\Tales\Form.isPassword:element},string:off | Ztal\Tales\Form.getAttrib:element,string:autocomplete;
+						   disabled Ztal\Tales\Form.isDisabled:element"
+	/>
+
+	<!-- Will display a <textarea> element -->
+	<textarea metal:define-macro="textareaElement"
+		      tal:attributes="name name | Ztal\Tales\Generic.isTrue:simpleElementNames,element/getName | element/getFullyQualifiedName;
+							  id element/getId;
+							  class Ztal\Tales\Form.getAttrib:element,string:class;
+							  rows Ztal\Tales\Form.getAttrib:element,string:rows;
+							  cols Ztal\Tales\Form.getAttrib:element,string:cols;
+							  disabled Ztal\Tales\Form.isDisabled:element;"
+			  tal:content="value"
+	/>
+
+	<label metal:define-macro="labelForElement"
+		   i18n:translate="content"
+		   tal:attributes="for elementId; class labelClass"
+	/>
+
+	<!-- Will display a single form element along with a label -->
+	<tal:block metal:define-macro="singleElement">
+
+		<tal:block tal:condition="Ztal\Tales\Form.showLabelBefore:element"
+				   tal:define="content element/getLabel;
+							   elementId element/getId;
+							   labelClass Ztal\Tales\Form.getAttrib:element,string:labelClass"
+				   metal:use-macro="labelForElement"
+		/>
+
+		<!-- Not used most of the time, but allows you to enclose the form
+			 element in a div if you need to, like if you need to include
+			 additional styling hooks. -->
+		<div tal:omit-tag="not:Ztal\Tales\Form.getAttrib:element,string:enclosed"
+			 tal:attributes="class Ztal\Tales\Form.getAttrib:element,string:enclosingClass">
+
+		<!-- If it is an input, render it using the inputElement fragment -->
+		<tal:block tal:condition="Ztal\Tales\Form.isInput:element"
+				tal:define="value element/getValue"
+				metal:use-macro="inputElement" />
+
+		<!-- If it is a checkbox, render it using the inputElement fragment -->
+		<tal:block tal:condition="Ztal\Tales\Form.isCheckbox:element">
+			<tal:block tal:define="value element/getCheckedValue; checked element/isChecked"
+				metal:use-macro="inputElement" />
+		</tal:block>
+
+		<!-- If it is a textarea, render it using the textareaElement fragment -->
+		<tal:block tal:condition="Ztal\Tales\Form.isTextarea:element"
+				   tal:define="value element/getValue"
+				   metal:use-macro="textareaElement" />
+
+		<!-- If it is a radio element, then iterate over the different options
+			and render each one as an input element. -->
+		<tal:block tal:condition="Ztal\Tales\Form.isRadio:element"
+				   tal:repeat="option element/getMultiOptions">
+			<label class="radioOption">
+				<tal:block tal:define="value repeat/option/key; checked Ztal\Tales\Generic.equal:element/getValue,repeat/option/key"
+						metal:use-macro="inputElement" />
+				<tal:block i18n:translate="option" />
+			</label>
+		</tal:block>
+
+		<!-- If it is a multiple checkbox element, then iterate over the
+			 different options and render each one as an input element. -->
+		<tal:block tal:condition="Ztal\Tales\Form.isMultiCheckbox:element"
+				   tal:repeat="option element/getMultiOptions">
+			<label class="checkboxOption">
+				<tal:block tal:define="name Ztal\Tales\Generic.isTrue:simpleElementNames,element/getName | element/getFullyQualifiedName;
+									   value repeat/option/key;
+									   checked Ztal\Tales\Form.isChecked:element,repeat/option/key"
+						   metal:use-macro="inputElement"
+			    />
+				<tal:block i18n:translate="option" />
+			</label>
+		</tal:block>
+
+		<!-- If it is a select, then create a <select> and then populate it with
+			 options based on the multiOptions in the element -->
+		<select tal:condition="Ztal\Tales\Form.isSelect:element"
+				tal:attributes="name Ztal\Tales\Generic.isTrue:simpleElementNames,element/getName | element/getFullyQualifiedName;
+								id element/getId;
+								disabled Ztal\Tales\Form.isDisabled:element">
+				<tal:block tal:define="sort Ztal\Tales\Form.getAttrib:element,string:sort | string:none;">
+				<option tal:repeat="option Ztal\Tales\ArrayUtils.sort:sort,Ztal\Tales\Translation.translateArrayValues:element/getMultiOptions"
+						tal:attributes="value repeat/option/key; selected Ztal\Tales\Generic.equal:element/getValue,repeat/option/key"
+						tal:content="option"
+				/>
+			</tal:block>
+		</select>
+
+		<!-- If it is a multiple select, then create a <select> and then populate it with
+			 options based on the multiOptions in the element -->
+		<select tal:condition="Ztal\Tales\Form.isMultiSelect:element"
+				tal:attributes="name Ztal\Tales\Generic.isTrue:simpleElementNames,element/getName | element/getFullyQualifiedName;
+								id element/getId;
+								disabled Ztal\Tales\Form.isDisabled:element;
+								multiple string:multiple;
+								class Ztal\Tales\Form.getAttrib:element,string:class">
+				<tal:block tal:define="sort Ztal\Tales\Form.getAttrib:element,string:sort | string:none;">
+				<tal:block tal:repeat="option Ztal\Tales\ArrayUtils.sort:sort,Ztal\Tales\Translation.translateArrayValues:element/getMultiOptions">
+					<option
+						tal:define="keyName repeat/option/key"
+						tal:attributes="value repeat/option/key; selected Ztal\Tales\ArrayUtils.in:repeat/option/key,element/getValue"
+						tal:content="option"
+					/>
+				</tal:block>
+			</tal:block>
+		</select>
+
+		<!-- If it is a button, then render it out -->
+		<button tal:condition="Ztal\Tales\Form.isButton:element"
+				tal:attributes="name Ztal\Tales\Generic.isTrue:simpleElementNames,element/getName | element/getFullyQualifiedName;
+								id Ztal\Tales\Form.getAttrib:element,string:id;
+								class Ztal\Tales\Form.getAttrib:element,string:class;
+								type Ztal\Tales\Form.getAttrib:element,string:type;
+								value element/getValue"
+				i18n:translate="element/getLabel" />
+
+		<!-- If it is an image captcha, display the image along with the instructions
+			 for completing it -->
+		<div tal:condition="Ztal\Tales\Form.isImageCaptcha:element"
+			 class="captcha">
+			<img tal:define="captcha element/getCaptcha;
+							 captchaId Ztal\Tales\Form.getAttrib:element,string:captchaId"
+				 tal:attributes="src string:${captcha/getImgUrl}${captchaId}.png"
+				 alt="Captcha Image"
+			/>
+			<input type="hidden"
+				   tal:attributes="name string:${element/getName}[id];
+								   value Ztal\Tales\Form.getAttrib:element,string:captchaId"
+			/>
+			<div class="captchaInstructions"
+				 i18n:translate="string:captchaInstructions" />
+			<label i18n:translate="string:captcha" />
+			<input autocomplete="off" type="text" value=""
+				   tal:attributes="name string:${element/getName}[input]"
+			/>
+			</div>
+
+			<!-- If it is a captcha, display the rendered text along with the
+					instructions for completing it -->
+			<div tal:condition="Ztal\Tales\Form.isCaptcha:element"
+				class="captcha">
+				<pre tal:define="captcha element/getCaptcha"
+					alt="Captcha Word"
+					tal:content="structure captcha/render"
+				/>
+				<input type="hidden"
+					tal:attributes="name string:${element/getName}[id];
+									value Ztal\Tales\Form.getAttrib:element,string:captchaId"
+				/>
+				<div class="captchaInstructions"
+					i18n:translate="string:captchaInstructions" />
+				<label i18n:translate="string:captcha" />
+				<input autocomplete="off" type="text" value=""
+					tal:attributes="name string:${element/getName}[input]"
+				/>
+		</div>
+			<tal:block tal:condition="Ztal\Tales\Form.showLabelAfter:element"
+					tal:define="content element/getLabel;
+							elementId element/getId;
+							labelClass Ztal\Tales\Form.getAttrib:element,string:labelClass"
+				metal:use-macro="labelForElement"
+			/>
+
+		</div>
+
+	</tal:block>
+
+</tal:block>

@@ -1,0 +1,31 @@
+<tal:block
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:tal="http://xml.zope.org/namespaces/tal"
+	xmlns:metal="http://xml.zope.org/namespaces/metal"
+	xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+	xmlns:phptal="http://phptal.org/ns/phptal"
+>
+
+	<tal:block tal:content="structure doctype" />
+	<html xmlns="http://www.w3.org/1999/xhtml">
+		<head>
+			<tal:block tal:content="structure headTitle" />
+			<tal:block tal:content="structure headMeta" />
+			<tal:block tal:content="structure headScript" />
+			<tal:block tal:content="structure headLink" />
+		</head>
+		<body>
+			<h1 i18n:translate="">An error occurred</h1>
+			<h2 i18n:translate="message"/>
+			<div tal:condition="not: productionMode">
+				<h3 i18n:translate="">Exception information:</h3>
+				<p><b i18n:translate="">Message:</b> <span tal:content="exceptionMessage"/></p>
+				<h3 i18n:translate="">Stack trace:</h3>
+				<pre tal:content="structure stackTrace" />
+				<h3 i18n:translate="">Request Parameters:</h3>
+				<pre tal:content="structure requestParameters" />
+			</div>
+		</body>
+	</html>
+
+</tal:block>

@@ -1,0 +1,283 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<package packagerversion="1.9.4" version="2.0" xmlns="http://pear.php.net/dtd/package-2.0" xmlns:tasks="http://pear.php.net/dtd/tasks-1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://pear.php.net/dtd/tasks-1.0     http://pear.php.net/dtd/tasks-1.0.xsd     http://pear.php.net/dtd/package-2.0     http://pear.php.net/dtd/package-2.0.xsd">
+ <name>ZTal</name>
+ <channel>pear.names.co.uk</channel>
+ <summary>ZTal integrates PHPTal and Zend Framework</summary>
+ <description>PHPTal is a PHP implementation of the Zope Template Attribute Language. ZTal allows you to use this templating system as the view component of the Zend Framework MVC stack.</description>
+ <lead>
+  <name>Rob Goldsmith</name>
+  <user>rgoldsmith</user>
+  <email>rgoldsmith@names.co.uk</email>
+  <active>yes</active>
+ </lead>
+ <lead>
+  <name>Alex Mace</name>
+  <user>amace</user>
+  <email>amace@names.co.uk</email>
+  <active>yes</active>
+ </lead>
+ <date>2013-05-20</date>
+ <time>14:28:54</time>
+ <version>
+  <release>1.5.2</release>
+  <api>1.5.2</api>
+ </version>
+ <stability>
+  <release>stable</release>
+  <api>stable</api>
+ </stability>
+ <license uri="http://www.apache.org/licenses/">Apache</license>
+ <notes>
+None
+ </notes>
+ <contents>
+  <dir baseinstalldir="Ztal" name="/">
+   <file baseinstalldir="Ztal" md5sum="59b6967a977dc0f4252f4881fa0fff13" name="Controller/Plugin/Ztal.php" role="php" />
+   <file baseinstalldir="Ztal" md5sum="025f277e771ebc3ff1f651da164211bb" name="example/application/Bootstrap.php" role="php" />
+   <file baseinstalldir="Ztal" md5sum="b44af446d6661eb0773671ef5b8a7d30" name="example/application/configs/application.xml" role="data" />
+   <file baseinstalldir="Ztal" md5sum="cbae3bf430b1d4c8d5fb385c19f52120" name="example/application/forms/Basic.php" role="php" />
+   <file baseinstalldir="Ztal" md5sum="6ced311707cc3d41348425b953404b91" name="example/application/languages/en/messages.mo" role="data" />
+   <file baseinstalldir="Ztal" md5sum="eb202d170bf8debb8d68188909d920bc" name="example/application/languages/en/messages.po" role="data" />
+   <file baseinstalldir="Ztal" md5sum="d41d8cd98f00b204e9800998ecf8427e" name="example/application/layouts/helpers/placeholder" role="data" />
+   <file baseinstalldir="Ztal" md5sum="6d03fe80602a3e4a14c20371ebe0774f" name="example/application/layouts/scripts/layout.xhtml" role="data" />
+   <file baseinstalldir="Ztal" md5sum="98a78340b772648ad0e0a878af72780b" name="example/application/models/Basic.php" role="php" />
+   <file baseinstalldir="Ztal" md5sum="db5987f4d58e67a056244052c51157aa" name="example/application/modules/default/controllers/ErrorController.php" role="php" />
+   <file baseinstalldir="Ztal" md5sum="673d2fd2a34c9d53b041ded6d92b4985" name="example/application/modules/default/controllers/IndexController.php" role="php" />
+   <file baseinstalldir="Ztal" md5sum="d41d8cd98f00b204e9800998ecf8427e" name="example/application/modules/default/views/helpers/placeholder" role="data" />
+   <file baseinstalldir="Ztal" md5sum="b9f15060d780896a9cf04a2d5a86f2b1" name="example/application/modules/default/views/scripts/error/error.xhtml" role="data" />
+   <file baseinstalldir="Ztal" md5sum="a7d212b9e4b7a5bb57e8000fd6018f0c" name="example/application/modules/default/views/scripts/index/form.xhtml" role="data" />
+   <file baseinstalldir="Ztal" md5sum="dd63ef5cc76612f602993136423edc91" name="example/application/modules/default/views/scripts/index/index.xhtml" role="data" />
+   <file baseinstalldir="Ztal" md5sum="0d45a4faf6ff56ca86b0ec76977b58b6" name="example/application/modules/default/views/scripts/index/objectTable.xhtml" role="data" />
+   <file baseinstalldir="Ztal" md5sum="73c476c72e6bb24f3ee8e31ddde75e8f" name="example/application/modules/default/views/scripts/index/table.xhtml" role="data" />
+   <file baseinstalldir="Ztal" md5sum="f7fa4e55995fc414f0fdca01f0dc3dbf" name="example/application/tables/Basic.php" role="php" />
+   <file baseinstalldir="Ztal" md5sum="50f0a167d5d0e352fa38019bda37053d" name="example/application/tables/Object.php" role="php" />
+   <file baseinstalldir="Ztal" md5sum="d41d8cd98f00b204e9800998ecf8427e" name="example/tal/cache/placeholder" role="data" />
+   <file baseinstalldir="Ztal" md5sum="d41d8cd98f00b204e9800998ecf8427e" name="example/tal/customModifiers/placeholder" role="data" />
+   <file baseinstalldir="Ztal" md5sum="d41d8cd98f00b204e9800998ecf8427e" name="example/tal/templateFragments/placeholder" role="data" />
+   <file baseinstalldir="Ztal" md5sum="2d1e26417495d005d23803c05fa4c306" name="example/web/index.php" role="php" />
+   <file baseinstalldir="Ztal" md5sum="845bdfe43f893df65a0942827f593366" name="Macros/ztal/form.xhtml" role="php" />
+   <file baseinstalldir="Ztal" md5sum="909f8fd9c2c2f6f7b6372aa7a3029e21" name="Macros/ztal/table.xhtml" role="php" />
+   <file baseinstalldir="Ztal" md5sum="cac3ae37197d4117e7f0ecbbdf408ca2" name="Table/Base.php" role="php" />
+   <file baseinstalldir="Ztal" md5sum="2b7c03114e4f4a6b15fac05b10a3e02e" name="Table/Row.php" role="php" />
+   <file baseinstalldir="Ztal" md5sum="00bd6eed023fd0ddb0a604329566cd99" name="Table/Column/ArraySource.php" role="php" />
+   <file baseinstalldir="Ztal" md5sum="1212293a871f7c9ab815b032dd80a38b" name="Table/Column/BaseSource.php" role="php" />
+   <file baseinstalldir="Ztal" md5sum="6bff5247331d5061602f2ae9d4c55ece" name="Table/Column/ObjectSource.php" role="php" />
+   <file baseinstalldir="Ztal" md5sum="c2d3f61f9011aea52d8f6eebff794ffe" name="Table/Paginator/ArraySource.php" role="php" />
+   <file baseinstalldir="Ztal" md5sum="fc517a42a7b26808e22bed3c83631b50" name="Table/Paginator/BaseSource.php" role="php" />
+   <file baseinstalldir="Ztal" md5sum="f110a5e717b313f1e4f63e0c68b62629" name="Table/Paginator/ObjectSource.php" role="php" />
+   <file baseinstalldir="Ztal" md5sum="8712093dfd90c74d8fa960bb16027b37" name="Tal/MockTranslator.php" role="php" />
+   <file baseinstalldir="Ztal" md5sum="aeb078c26a5cc425e347bf94164ec175" name="Tal/PharResolver.php" role="php" />
+   <file baseinstalldir="Ztal" md5sum="7324bfad94747b3c9e5fef7ce67d52f0" name="Tal/View.php" role="php" />
+   <file baseinstalldir="Ztal" md5sum="3d63180dbbc8d57fe5e74e03db3eb9c5" name="Tal/ZendTranslateTranslator.php" role="php" />
+   <file baseinstalldir="Ztal" md5sum="e2a8fb80715df0c0fd38af380a452aaf" name="Tales/ArrayUtils.php" role="php" />
+   <file baseinstalldir="Ztal" md5sum="78206727e2da0b27afd90b55f181b270" name="Tales/Form.php" role="php" />
+   <file baseinstalldir="Ztal" md5sum="7be86241538a14f138f05b31c48a064d" name="Tales/Generic.php" role="php" />
+   <file baseinstalldir="Ztal" md5sum="20603ddefeb319ac79f1ad4525d4e592" name="Tales/Translation.php" role="php" />
+   <file baseinstalldir="Ztal" md5sum="aa355dfaae03a89cf1b9161db2cd61cb" name="tests/AllTests.php" role="test" />
+   <file baseinstalldir="Ztal" md5sum="67395871a11ba3e1ac90eb31f9778968" name="tests/sharedTestSetup.php" role="test" />
+   <file baseinstalldir="Ztal" md5sum="90a711a9fe531f90587b2d46a1be3b76" name="tests/Tests/AutoloaderTests.php" role="test" />
+   <file baseinstalldir="Ztal" md5sum="5b08dfbdb6b561ab68774219010811df" name="Translate/Adaptor/Gettext.php" role="php" />
+   <file baseinstalldir="Ztal" md5sum="6bb5481523baaad1570a21e73d8e1f2f" name="Autoloader.php" role="php" />
+   <file baseinstalldir="Ztal" md5sum="18841abb4c344352576fbd7dcfbc578d" name="build.xml" role="data" />
+   <file baseinstalldir="Ztal" md5sum="f7a234a549967c6727b71fd7ff753181" name="CHANGELOG" role="data" />
+   <file baseinstalldir="Ztal" md5sum="3f503e81c966d4d23be81d3b45d1ccb7" name="composer.json" role="data" />
+   <file baseinstalldir="Ztal" md5sum="0e9e9c1d8472a8f6217762bcb32c54e4" name="Form.php" role="php" />
+   <file baseinstalldir="Ztal" md5sum="da27ef050e61662df9807f9da3e8c172" name="LICENSE" role="data" />
+   <file baseinstalldir="Ztal" md5sum="e13d5e3151955d34df39de1171f8ba5b" name="Mail.php" role="php" />
+   <file baseinstalldir="Ztal" md5sum="3863625b5779898323b3b3e6c65be5b8" name="README.md" role="data" />
+  </dir>
+ </contents>
+ <dependencies>
+  <required>
+   <php>
+    <min>5.2</min>
+   </php>
+   <pearinstaller>
+    <min>1.4.0</min>
+   </pearinstaller>
+  </required>
+ </dependencies>
+ <phprelease />
+ <changelog>
+  <release>
+   <version>
+    <release>0.9.0</release>
+    <api>0.9.0</api>
+   </version>
+   <stability>
+    <release>beta</release>
+    <api>beta</api>
+   </stability>
+   <date>2010-07-27</date>
+   <license uri="http://www.apache.org/licenses/">Apache</license>
+   <notes>
+None
+   </notes>
+  </release>
+  <release>
+   <version>
+    <release>0.9.1</release>
+    <api>0.9.0</api>
+   </version>
+   <stability>
+    <release>beta</release>
+    <api>beta</api>
+   </stability>
+   <date>2010-07-27</date>
+   <license uri="http://www.apache.org/licenses/">Apache</license>
+   <notes>
+None
+   </notes>
+  </release>
+  <release>
+   <version>
+    <release>0.9.2</release>
+    <api>0.9.2</api>
+   </version>
+   <stability>
+    <release>beta</release>
+    <api>beta</api>
+   </stability>
+   <date>2010-08-03</date>
+   <license uri="http://www.apache.org/licenses/">Apache</license>
+   <notes>
+None
+   </notes>
+  </release>
+  <release>
+   <version>
+    <release>1.0.0</release>
+    <api>1.0.0</api>
+   </version>
+   <stability>
+    <release>stable</release>
+    <api>stable</api>
+   </stability>
+   <date>2010-12-17</date>
+   <license uri="http://www.apache.org/licenses/">Apache</license>
+   <notes>
+None
+   </notes>
+  </release>
+  <release>
+   <version>
+    <release>1.1.0</release>
+    <api>1.1.0</api>
+   </version>
+   <stability>
+    <release>stable</release>
+    <api>stable</api>
+   </stability>
+   <date>2011-04-08</date>
+   <license uri="http://www.apache.org/licenses/">Apache</license>
+   <notes>
+None
+   </notes>
+  </release>
+  <release>
+   <version>
+    <release>1.2.0</release>
+    <api>1.2.0</api>
+   </version>
+   <stability>
+    <release>stable</release>
+    <api>stable</api>
+   </stability>
+   <date>2011-06-29</date>
+   <license uri="http://www.apache.org/licenses/">Apache</license>
+   <notes>
+None
+   </notes>
+  </release>
+  <release>
+   <version>
+    <release>1.3.0</release>
+    <api>1.3.0</api>
+   </version>
+   <stability>
+    <release>stable</release>
+    <api>stable</api>
+   </stability>
+   <date>2012-03-27</date>
+   <license uri="http://www.apache.org/licenses/">Apache</license>
+   <notes>
+None
+   </notes>
+  </release>
+  <release>
+   <version>
+    <release>1.4.0</release>
+    <api>1.4.0</api>
+   </version>
+   <stability>
+    <release>stable</release>
+    <api>stable</api>
+   </stability>
+   <date>2012-09-21</date>
+   <license uri="http://www.apache.org/licenses/">Apache</license>
+   <notes>
+None
+   </notes>
+  </release>
+  <release>
+   <version>
+    <release>1.5.0</release>
+    <api>1.5.0</api>
+   </version>
+   <stability>
+    <release>stable</release>
+    <api>stable</api>
+   </stability>
+   <date>2013-05-03</date>
+   <license uri="http://www.apache.org/licenses/">Apache</license>
+   <notes>
+None
+   </notes>
+  </release>
+  <release>
+   <version>
+    <release>1.5.1</release>
+    <api>1.5.1</api>
+   </version>
+   <stability>
+    <release>stable</release>
+    <api>stable</api>
+   </stability>
+   <date>2013-05-07</date>
+   <license uri="http://www.apache.org/licenses/">Apache</license>
+   <notes>
+None
+   </notes>
+  </release>
+  <release>
+   <version>
+    <release>1.4.1</release>
+    <api>1.4.1</api>
+   </version>
+   <stability>
+    <release>stable</release>
+    <api>stable</api>
+   </stability>
+   <date>2013-05-17</date>
+   <license uri="http://www.apache.org/licenses/">Apache</license>
+   <notes>
+None
+   </notes>
+  </release>
+  <release>
+   <version>
+    <release>1.5.2</release>
+    <api>1.5.2</api>
+   </version>
+   <stability>
+    <release>stable</release>
+    <api>stable</api>
+   </stability>
+   <date>2013-05-20</date>
+   <license uri="http://www.apache.org/licenses/">Apache</license>
+   <notes>
+None
+   </notes>
+  </release>
+ </changelog>
+</package>
